@@ -92,7 +92,7 @@ st.sidebar.title("SyncUp Navigation")
 page = st.sidebar.selectbox("Go to", ["Dashboard", "Project Status", "Team Nudge", "Analytics","Smart Slot","Pulse Check","File Hub"])
 
 
-tasks = get_project_tasks(st.session_state.project_id)
+tasks = get_project_tasks(client, st.session_state.project_id)
 
 if page == "Dashboard":
     st.title("🚀 Project SyncUp Dashboard")
