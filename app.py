@@ -32,19 +32,18 @@ if not st.session_state.authenticated:
             st.title("Welcome to SyncUp 🚀")
             st.subheader("Conflict-free collaboration for modern teams.")
             st.write("Stop ghosting and start building. SyncUp automates your scheduling and team health tracking.")
+            if st.button("Start"): 
+                st.session_state.step = "choice"
+                st.rerun()
         
         with col2:
             # You can place your image here
-            st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f", 
+            st.image("https://lh3.googleusercontent.com/gg-dl/AOI_d_8e04IepvFPjXXitn-ANND1pbQNPT-Xl1lpPnWoJO5WYY7_Wh46q-c8P3KjP-ILgv_GD8scFI_v6mUOc11pH-UdSKaCT3EWOt1nMFXPvg-8xiUQzFAeYIwaemBMlJT1bq4i6oocieWHTzWcCvFd24_aEMIvQOqlrEH3zM0pxqySN2-y=s1024-rj", 
                      use_container_width=True)
         
         st.divider()# 1. Add all changes (this catches the new .streamlit folder and your updated app.py)
         
-        
-        
-        
-        
-        if st.button("Start"): st.session_state.step = "choice"; st.rerun()
+
     elif st.session_state.step == "choice":
         choice = st.radio("What would you like to do?", ["Create New Project", "Open Existing Project"])
         if st.button("Continue"): st.session_state.step = "create" if choice == "Create New Project" else "open"; st.rerun()
