@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
-import os
 import plotly.express as px
 from db import supabase
 from logic import verify_project_code, create_new_project, get_project_tasks, send_nudge_email, update_task_progress , save_availability , get_team_availability, submit_pulse, get_pulse_data, get_file_hub_data, update_task_with_file
 
-print(f"URL loaded: {os.getenv('SUPABASE_URL') is not None}")
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="SyncUp Portal", layout="wide")
@@ -250,3 +248,4 @@ elif page == "File Hub":
                         st.link_button("Open Resource", f['file_url'], use_container_width=True)
     else:
         st.info("No files have been linked to tasks yet. Update your tasks in the 'Project Status' page to see them here.")
+        
