@@ -79,7 +79,7 @@ if not st.session_state.authenticated:
     elif st.session_state.step == "open":
         code = st.text_input("Enter Code", type="password")
         if st.button("Access"):
-            pid = verify_project_code(code)
+            pid = verify_project_code(client ,code)
             if pid: 
                 st.session_state.project_id = pid
                 st.session_state.authenticated = True
