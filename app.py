@@ -78,7 +78,7 @@ if not st.session_state.authenticated:
             if name and code:
                 try:
                     user_session = client.auth.get_session()
-                    st.write(f"DEBUG: Session object: {user_session}")
+                    
             
                     user_data = client.auth.get_user()
                     user_id = user_data.user.id
