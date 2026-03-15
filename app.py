@@ -130,6 +130,7 @@ page = st.sidebar.selectbox("Go to", ["Dashboard", "Project Status", "Team Nudge
 tasks = get_project_tasks(client, st.session_state.project_id)
 
 if page == "Dashboard":
+    client = get_authenticated_client()
     st.title("🚀 Project SyncUp Dashboard")
     with st.expander("➕ Create New Task"):
         with st.form("task_form", clear_on_submit=True):
@@ -150,6 +151,7 @@ if page == "Dashboard":
         st.plotly_chart(fig, width='stretch')
 
 elif page == "Analytics":
+    client = get_authenticated_client()
     st.title("📊 Project Analytics")
     if tasks:
         df = pd.DataFrame(tasks)
@@ -157,6 +159,7 @@ elif page == "Analytics":
         st.plotly_chart(fig_pie, width='stretch')
 
 elif page == "Project Status":
+    client = get_authenticated_client()
     st.title("📋 Project Status")
     for task in tasks:
         with st.container(border=True):
@@ -178,6 +181,7 @@ elif page == "Project Status":
                         st.rerun()
 
 elif page == "Team Nudge":
+    client = get_authenticated_client()
     st.title("🔔 Automated Nudge Hub")
     if "nudge_history" not in st.session_state: st.session_state.nudge_history = []
     for task in tasks:
@@ -193,6 +197,7 @@ elif page == "Team Nudge":
     for entry in st.session_state.nudge_history: st.text(f"✅ {entry}")
 
 elif page == "Smart Slot":
+    client = get_authenticated_client()
     st.title("📅 Smart Slot Finder")
     
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -239,6 +244,7 @@ elif page == "Smart Slot":
 
 
 elif page == "Pulse Check":
+    client = get_authenticated_client()
     st.title("💓 Team Pulse Check")
     st.write("How are you feeling about the project right now? (Anonymous)")
 
@@ -280,6 +286,7 @@ elif page == "Pulse Check":
             st.plotly_chart(fig, width='stretch')
 
 elif page == "File Hub":
+    client = get_authenticated_client()
     st.title("📂 Central File Hub")
     st.write("Access all project resources and deliverables in one place.")
 
