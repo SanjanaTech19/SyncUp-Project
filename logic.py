@@ -86,3 +86,34 @@ def send_nudge_email(email: str, task_name: str) -> bool:
     except Exception as e:
         st.error(f"Failed to send email: {e}")
         return False
+    
+def update_task_progress(client, task_id: str, new_percentage: int) -> bool:
+    """Updates task progress using an authenticated client."""
+    try:
+        client.table("project_tasks") \
+            .update({"progress_percentage": new_percentage}) \
+            .eq("id", str(task_id)) \
+            .execute()
+        return True
+    except Exception as e:
+        # In a production app, logging the error is better than just showing it to the user
+        st.error(f"Database error: {e}")
+        return False
+    
+def get_file_hub_data(client, project_id: str) -> List[Dict]:
+    """
+    Fetches task data for the File Hub, filtering only for tasks 
+    that have an associated file_url.
+    """
+    try:
+        response = client.table("project_tasks") \
+            .select("task_name, file_url, progress_percentage, assigned_email") \
+            .eq("project_id", project_id) \
+            .not_.is_("file_url", "null") \
+            .neq("file_url", "") \
+            .execute()
+        
+        return response.data if response.data else []
+    except Exception as e:
+        st.error(f"Error fetching file hub data: {e}")
+        return []

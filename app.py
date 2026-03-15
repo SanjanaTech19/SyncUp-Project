@@ -138,7 +138,7 @@ elif page == "Project Status":
             
             with c2:
                 if st.button("Save Changes", key=f"save_{task['id']}"):
-                    if update_task_with_file(task['id'], new_val, new_url):
+                    if update_task_progress(client, task['id'], new_val):
                         st.toast("Updated successfully!")
                         st.rerun()
 
@@ -248,24 +248,19 @@ elif page == "File Hub":
     st.title("📂 Central File Hub")
     st.write("Access all project resources and deliverables in one place.")
 
-    files = get_file_hub_data(st.session_state.project_id)
+    # Pass 'client' here!
+    files = get_file_hub_data(client, st.session_state.project_id)
 
     if files:
-        # 1. Search/Filter bar for quick access
         search = st.text_input("Search for a specific file or task...", placeholder="e.g. Report, Design, etc.")
-        
-        # 2. Display as a clean, professional table/list
         for f in files:
             if search.lower() in f['task_name'].lower():
                 with st.container(border=True):
                     col1, col2 = st.columns([3, 1])
-                    
                     with col1:
                         st.markdown(f"### {f['task_name']}")
-                        st.caption(f"Owner: {f.get('user_email', 'Unassigned')} | Progress: {f['progress_percentage']}%")
-                    
+                        st.caption(f"Owner: {f.get('assigned_email', 'Unassigned')} | Progress: {f['progress_percentage']}%")
                     with col2:
-                        # Professional button to open the link
                         st.link_button("Open Resource", f['file_url'], use_container_width=True)
     else:
-        st.info("No files have been linked to tasks yet. Update your tasks in the 'Project Status' page to see them here.")
+        st.info("No files found. Link files in the 'Project Status' page to see them here.")
