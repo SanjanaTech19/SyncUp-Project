@@ -72,10 +72,27 @@ if not st.session_state.authenticated:
     elif st.session_state.step == "create":
         name = st.text_input("Project Name")
         code = st.text_input("Set Code", type="password")
+        
+        
         if st.button("Register"): 
-            create_new_project(client,name, code)
-            st.session_state.step = "login"
-            st.rerun()
+           if name and code: 
+                try:
+                    user_session = client.auth.get_user()
+                    user_id = user_session.user.id
+            
+            # 2. Call the function with the now-required user_id
+                    success = create_new_project(client, name, code, user_id=user_id)
+            
+                    if success:
+                        st.success("Project created successfully!")
+                    else:
+                        st.error("Could not create project. Check your logs.")
+                except Exception as e:
+                    st.error("You must be logged in to create a project.")
+           else:
+               st.warning("Please provide both a project name and an access code.")
+    
+    
     elif st.session_state.step == "open":
         code = st.text_input("Enter Code", type="password")
         if st.button("Access"):

@@ -31,6 +31,10 @@ def verify_project_code(client, plain_code: str):
     hashed_code = _generate_hash(plain_code) # Use the helper
     response = client.table("projects").select("id, access_code_hash").execute()
     
+    
+    st.write(f"DEBUG: Input: {plain_code} | Hash: {hashed_code}")
+    
+    
     for row in response.data:
         if row.get('access_code_hash') == hashed_code:
             return row['id']
