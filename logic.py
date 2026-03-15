@@ -31,7 +31,7 @@ def verify_project_code(client, plain_code: str):
     hashed_input = _generate_hash(plain_code)
     
     # Fetch data
-    response = client.table("projects").select("project_name, access_code_hash").execute()
+    response = client.table("projects").select("id,project_name, access_code_hash").execute()
     
     # Log the number of rows found
     st.write(f"DEBUG: Found {len(response.data)} projects in database.")
