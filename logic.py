@@ -1,4 +1,6 @@
 import hashlib
+import smtplib
+from email.message import EmailMessage
 import streamlit as st
 from supabase import create_client
 from typing import List, Dict, Optional
@@ -78,9 +80,22 @@ def update_task_progress(task_id: str, new_percentage: int) -> bool:
         return False
 
 def send_nudge_email(email: str, task_name: str) -> bool:
-    """Placeholder for future email integration."""
-    st.info(f"Email sent to {email} regarding '{task_name}'")
-    return True
+    # 1. Setup the email content
+    msg = EmailMessage()
+    msg['Subject'] = f"Nudge: Time to check in on {task_name}"
+    msg['From'] = st.secrets["EMAIL_USER"]
+    msg['To'] = email
+    msg.set_content(f"Hi there,\n\nThis is a friendly nudge from SyncUp. Please check in on your task: {task_name}.\n\nKeep up the great work!")
+
+    # 2. Connect to the email server (using Gmail as an example)
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(st.secrets["EMAIL_USER"], st.secrets["EMAIL_PASS"])
+            smtp.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"Failed to send email: {e}")
+        return False
 
 def save_availability(project_id, email, day, slots):
     # First, clear existing slots for this user on this day to avoid duplicates
