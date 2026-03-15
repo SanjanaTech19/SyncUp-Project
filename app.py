@@ -27,7 +27,23 @@ if "project_id" not in st.session_state: st.session_state.project_id = None
 # --- AUTH FLOW ---
 if not st.session_state.authenticated:
     if st.session_state.step == "login":
-        st.title("Welcome to SyncUp")
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            st.title("Welcome to SyncUp 🚀")
+            st.subheader("Conflict-free collaboration for modern teams.")
+            st.write("Stop ghosting and start building. SyncUp automates your scheduling and team health tracking.")
+        
+        with col2:
+            # You can place your image here
+            st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f", 
+                     use_container_width=True)
+        
+        st.divider()# 1. Add all changes (this catches the new .streamlit folder and your updated app.py)
+        
+        
+        
+        
+        
         if st.button("Start"): st.session_state.step = "choice"; st.rerun()
     elif st.session_state.step == "choice":
         choice = st.radio("What would you like to do?", ["Create New Project", "Open Existing Project"])
