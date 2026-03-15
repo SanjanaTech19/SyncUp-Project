@@ -12,26 +12,25 @@ key = st.secrets["supabase_key"]
 supabase = create_client(url, key)
 
 # --- Utilities ---
-def get_hash(plain_code: str) -> str:
-    """Standardizes input to ensure hashing consistency."""
-    return hashlib.sha256(plain_code.strip().lower().encode()).hexdigest()
+# --- Add this helper in logic.py ---
+def _generate_hash(code: str) -> str:
+    # Always strip whitespace and convert to lowercase before hashing
+    return hashlib.sha256(code.strip().lower().encode('utf-8')).hexdigest()
 
-# --- Auth & Project Logic ---
-# --- Updated Logic Functions ---
-
+# --- Now update your logic functions ---
 def create_new_project(client, project_name: str, plain_code: str, user_id: Optional[str] = None) -> bool:
     try:
-        hashed_code = get_hash(plain_code)
+        hashed_code = _generate_hash(plain_code) # Use the helper
         data = {"project_name": project_name, "access_code_hash": hashed_code, "user_id": user_id}
         client.table("projects").insert(data).execute()
         return True
     except Exception as e:
-        st.error(f"Error creating project: {str(e)}")
         return False
 
 def verify_project_code(client, plain_code: str):
-    hashed_code = hashlib.sha256(plain_code.encode('utf-8')).hexdigest()
-    response = client.table("projects").select("*").execute()
+    hashed_code = _generate_hash(plain_code) # Use the helper
+    response = client.table("projects").select("id, access_code_hash").execute()
+    
     for row in response.data:
         if row.get('access_code_hash') == hashed_code:
             return row['id']
