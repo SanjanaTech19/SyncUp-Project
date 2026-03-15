@@ -168,7 +168,7 @@ elif page == "Team Nudge":
         with col1: st.write(f"**Task:** {task['task_name']} | **Owner:** {task['assigned_email']}")
         with col2:
             if st.button(f"Nudge", key=f"nudge_{task['id']}"):
-                if send_nudge_email(client , task['assigned_email'], task['task_name']):
+                if send_nudge_email(task['assigned_email'], task['task_name']):
                     st.toast(f"Nudge sent to {task['assigned_email']}!")
                     st.session_state.nudge_history.append(f"Nudged {task['assigned_email']} for '{task['task_name']}'")
     st.divider()
