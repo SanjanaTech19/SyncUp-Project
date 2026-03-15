@@ -41,7 +41,7 @@ if not st.session_state.authenticated:
             st.image("assets/homescreen.jpg", 
                      use_container_width=True)
         
-        st.divider()# 1. Add all changes (this catches the new .streamlit folder and your updated app.py)
+        st.divider()
         
 
     elif st.session_state.step == "choice":
@@ -69,7 +69,7 @@ if not st.session_state.authenticated:
 st.sidebar.title("SyncUp Navigation")
 page = st.sidebar.selectbox("Go to", ["Dashboard", "Project Status", "Team Nudge", "Analytics","Smart Slot","Pulse Check","File Hub"])
 
-# Fetch tasks once here, it will be used by the page functions
+
 tasks = get_project_tasks(st.session_state.project_id)
 
 if page == "Dashboard":
