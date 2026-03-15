@@ -38,7 +38,7 @@ if not st.session_state.authenticated:
         
         with col2:
             # You can place your image here
-            st.image("https://lh3.googleusercontent.com/gg-dl/AOI_d_8e04IepvFPjXXitn-ANND1pbQNPT-Xl1lpPnWoJO5WYY7_Wh46q-c8P3KjP-ILgv_GD8scFI_v6mUOc11pH-UdSKaCT3EWOt1nMFXPvg-8xiUQzFAeYIwaemBMlJT1bq4i6oocieWHTzWcCvFd24_aEMIvQOqlrEH3zM0pxqySN2-y=s1024-rj", 
+            st.image("assets/team_cartoon.jpg", 
                      use_container_width=True)
         
         st.divider()# 1. Add all changes (this catches the new .streamlit folder and your updated app.py)
