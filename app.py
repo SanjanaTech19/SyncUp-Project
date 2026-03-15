@@ -5,6 +5,7 @@ from db import supabase
 from supabase import create_client
 from logic import verify_project_code, create_new_project, get_project_tasks, send_nudge_email, update_task_progress , save_availability , get_team_availability, submit_pulse, get_pulse_data, get_file_hub_data, update_task_with_file
 
+# At the top of app.py, after imports
 
 
 def get_authenticated_client():
@@ -23,8 +24,8 @@ def get_authenticated_client():
     return client
 
 
-client = get_authenticated_client()
 
+client = get_authenticated_client()
 
 
 
@@ -126,11 +127,11 @@ if not st.session_state.authenticated:
 st.sidebar.title("SyncUp Navigation")
 page = st.sidebar.selectbox("Go to", ["Dashboard", "Project Status", "Team Nudge", "Analytics","Smart Slot","Pulse Check","File Hub"])
 
-
 tasks = get_project_tasks(client, st.session_state.project_id)
 
 if page == "Dashboard":
     client = get_authenticated_client()
+    
     st.title("🚀 Project SyncUp Dashboard")
     with st.expander("➕ Create New Task"):
         with st.form("task_form", clear_on_submit=True):
@@ -152,6 +153,7 @@ if page == "Dashboard":
 
 elif page == "Analytics":
     client = get_authenticated_client()
+    
     st.title("📊 Project Analytics")
     if tasks:
         df = pd.DataFrame(tasks)
@@ -160,6 +162,7 @@ elif page == "Analytics":
 
 elif page == "Project Status":
     client = get_authenticated_client()
+    
     st.title("📋 Project Status")
     for task in tasks:
         with st.container(border=True):
@@ -182,6 +185,7 @@ elif page == "Project Status":
 
 elif page == "Team Nudge":
     client = get_authenticated_client()
+    
     st.title("🔔 Automated Nudge Hub")
     if "nudge_history" not in st.session_state: st.session_state.nudge_history = []
     for task in tasks:
@@ -287,6 +291,7 @@ elif page == "Pulse Check":
 
 elif page == "File Hub":
     client = get_authenticated_client()
+
     st.title("📂 Central File Hub")
     st.write("Access all project resources and deliverables in one place.")
 

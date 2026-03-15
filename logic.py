@@ -9,7 +9,7 @@ from typing import List, Dict, Optional
 # Uses Streamlit's internal secrets management (secrets.toml)
 url = st.secrets["supabase_url"]
 key = st.secrets["supabase_key"]
-supabase = create_client(url, key)
+
 
 # --- Utilities ---
 # --- Add this helper in logic.py ---
