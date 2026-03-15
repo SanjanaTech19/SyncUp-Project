@@ -76,23 +76,25 @@ if not st.session_state.authenticated:
         
         if st.button("Register"):
             if name and code:
-                try:
-                    user_session = client.auth.get_session()
-                    
-            
-                    user_data = client.auth.get_user()
-                    user_id = user_data.user.id
-            
-                    success = create_new_project(client, name, code, user_id=user_id)
-                    if success:
-                        st.success("Project created successfully!")
+                
+                    session = client.auth.get_session()
+                    if not session:
+                        st.error("Your session has expired. Please log in again.")
                     else:
-                        st.error("Could not create project.")
-                except Exception as e:
-                    st.error(f"Error details: {str(e)}")
+                        user_data = client.auth.get_user()
+                        if user_data and user_data.user:
+                            user_id = user_data.user.id
+                            success = create_new_project(client, name, code, user_id=user_id)
+                            if success:
+                                st.success("Project created!")
+                            else:
+                                st.error("Could not create project.")
+                        else:
+                            st.error("Could not retrieve user info.")
             else:
-                st.warning("Please provide both a project name and an access code.")
-    
+                st.warning("Please provide a name and code.")
+                    
+                    
     
     elif st.session_state.step == "open":
         code = st.text_input("Enter Code", type="password")
