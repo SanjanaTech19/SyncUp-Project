@@ -73,7 +73,7 @@ if not st.session_state.authenticated:
         name = st.text_input("Project Name")
         code = st.text_input("Set Code", type="password")
         if st.button("Register"): 
-            create_new_project(client, code)
+            create_new_project(client,name, code)
             st.session_state.step = "login"
             st.rerun()
     elif st.session_state.step == "open":
