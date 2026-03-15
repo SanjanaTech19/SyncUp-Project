@@ -66,3 +66,23 @@ def update_task_with_file(client, task_id, new_progress, file_url):
     except Exception as e:
         st.error(f"Database error: {e}")
         return False
+
+def send_nudge_email(email: str, task_name: str) -> bool:
+    """Sends a friendly nudge email to a team member."""
+    # 1. Setup the email content
+    msg = EmailMessage()
+    msg['Subject'] = f"SyncUp Nudge: {task_name}"
+    msg['From'] = st.secrets["EMAIL_USER"]
+    msg['To'] = email
+    msg.set_content(f"Hi there,\n\nThis is a friendly nudge from SyncUp. Please check in on your task: '{task_name}'.\n\nKeep up the great work!")
+
+    # 2. Connect to the email server (using Gmail as an example)
+    try:
+        # Note: Use port 465 for SSL or 587 for TLS
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(st.secrets["EMAIL_USER"], st.secrets["EMAIL_PASS"])
+            smtp.send_message(msg)
+        return True
+    except Exception as e:
+        st.error(f"Failed to send email: {e}")
+        return False
