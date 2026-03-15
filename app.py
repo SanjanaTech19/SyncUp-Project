@@ -38,7 +38,7 @@ if not st.session_state.authenticated:
         
         with col2:
             # You can place your image here
-            st.image("assets/homepgimg.jpg", 
+            st.image("assets/homepage.jpg", 
                      use_container_width=True)
         
         st.divider()# 1. Add all changes (this catches the new .streamlit folder and your updated app.py)
