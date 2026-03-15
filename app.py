@@ -150,7 +150,7 @@ elif page == "Team Nudge":
         with col1: st.write(f"**Task:** {task['task_name']} | **Owner:** {task['assigned_email']}")
         with col2:
             if st.button(f"Nudge", key=f"nudge_{task['id']}"):
-                if send_nudge_email(task['assigned_email'], task['task_name']):
+                if send_nudge_email(client , task['assigned_email'], task['task_name']):
                     st.toast(f"Nudge sent to {task['assigned_email']}!")
                     st.session_state.nudge_history.append(f"Nudged {task['assigned_email']} for '{task['task_name']}'")
     st.divider()
@@ -170,12 +170,12 @@ elif page == "Smart Slot":
             u_day = st.selectbox("Select Day", days)
             u_slots = st.multiselect("When are you free?", slots)
             if st.form_submit_button("Save My Slots"):
-                save_availability(st.session_state.project_id, u_email, u_day, u_slots)
+                save_availability(client,st.session_state.project_id, u_email, u_day, u_slots)
                 st.success("Availability updated!")
                 st.rerun()
 
     # --- HEATMAP LOGIC ---
-    raw_data = get_team_availability(st.session_state.project_id)
+    raw_data = get_team_availability(client, st.session_state.project_id)
     
     if raw_data:
         # Create an empty matrix
@@ -223,13 +223,13 @@ elif page == "Pulse Check":
                          format_func=lambda x: vibe_options[x])
         
         if st.button("Submit Pulse"):
-            submit_pulse(st.session_state.project_id, score, vibe_options[score])
+            submit_pulse(client,st.session_state.project_id, score, vibe_options[score])
             st.toast("Mood submitted anonymously!", icon="🙏")
             st.rerun()
 
     # 2. Visualization Section
     with col2:
-        pulse_data = get_pulse_data(st.session_state.project_id)
+        pulse_data = get_pulse_data(client,st.session_state.project_id)
         if pulse_data:
             df_pulse = pd.DataFrame(pulse_data)
             avg_vibe = df_pulse['vibe_score'].mean()
