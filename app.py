@@ -78,23 +78,16 @@ if not st.session_state.authenticated:
         code = st.text_input("Set Code", type="password")
         
         
+        # Replace your current Register button logic with this:
         if st.button("Register"):
             if name and code:
-                
-                    session = client.auth.get_session()
-                    if not session:
-                        st.error("Your session has expired. Please log in again.")
-                    else:
-                        user_data = client.auth.get_user()
-                        if user_data and user_data.user:
-                            user_id = user_data.user.id
-                            success = create_new_project(client, name, code, user_id=user_id)
-                            if success:
-                                st.success("Project created!")
-                            else:
-                                st.error("Could not create project.")
-                        else:
-                            st.error("Could not retrieve user info.")
+                success = create_new_project(client, name, code, user_id=None) 
+        
+                if success:
+                    st.success("Project created!")
+                    st.session_state.step = "login" # Or wherever you want to redirect
+                else:
+                    st.error("Could not create project.")
             else:
                 st.warning("Please provide a name and code.")
                     
