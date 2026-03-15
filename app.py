@@ -9,8 +9,8 @@ from logic import verify_project_code, create_new_project, get_project_tasks, se
 
 def get_authenticated_client():
     # 1. Get the URL and Key
-    url = st.secrets["SUPABASE_URL"]
-    key = st.secrets["SUPABASE_KEY"]
+    url = st.secrets["supabase_url"]
+    key = st.secrets["supabase_key"]
     
     # 2. Create the base client
     client = create_client(url, key)
