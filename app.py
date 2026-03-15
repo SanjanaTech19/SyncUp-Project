@@ -8,16 +8,19 @@ from logic import verify_project_code, create_new_project, get_project_tasks, se
 
 
 def get_authenticated_client():
-    url = st.secrets["supabase_url"]
-    key = st.secrets["supabase_key"]
-    supabase = create_client(url, key)
+    # 1. Get the URL and Key
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
     
-    # This is the "Magic" part that makes RLS work
-    if "session" in st.session_state and st.session_state["session"]:
-        session = st.session_state["session"]
-        supabase.auth.set_session(session.access_token, session.refresh_token)
+    # 2. Create the base client
+    client = create_client(url, key)
     
-    return supabase
+    # 3. Inject the session if it exists in session_state
+    if "user_session" in st.session_state and st.session_state.user_session:
+        session = st.session_state.user_session
+        client.auth.set_session(session.access_token, session.refresh_token)
+        
+    return client
 
 
 client = get_authenticated_client()
@@ -99,12 +102,24 @@ if not st.session_state.authenticated:
     elif st.session_state.step == "open":
         code = st.text_input("Enter Code", type="password")
         if st.button("Access"):
-            pid = verify_project_code(client ,code)
-            if pid: 
-                st.session_state.project_id = pid
-                st.session_state.authenticated = True
-                st.rerun()
-            else: st.error("Invalid Code")
+            try:
+                # 1. Perform the login/verification
+                pid = verify_project_code(client, code)
+                
+                if pid: 
+                    # 2. SAVE THE SESSION:
+                    # If verify_project_code performs a sign_in, 
+                    # ensure you capture that session here!
+                    # Example: response = client.auth.sign_in_with_password(...)
+                    # st.session_state.user_session = response.session 
+                    
+                    st.session_state.project_id = pid
+                    st.session_state.authenticated = True
+                    st.rerun() # This triggers the app to reload with the new session
+                else: 
+                    st.error("Invalid Code")
+            except Exception as e:
+                st.error(f"Access error: {e}")
     st.stop() 
 
 # --- MAIN APP INTERFACE ---
