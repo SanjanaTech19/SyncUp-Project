@@ -8,8 +8,8 @@ from logic import verify_project_code, create_new_project, get_project_tasks, se
 
 
 def get_authenticated_client():
-    url = st.secrets["SUPABASE_URL"]
-    key = st.secrets["SUPABASE_KEY"]
+    url = st.secrets["supabase_url"]
+    key = st.secrets["supabase_key"]
     supabase = create_client(url, key)
     
     # This is the "Magic" part that makes RLS work
