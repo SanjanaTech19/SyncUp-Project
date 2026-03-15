@@ -28,16 +28,22 @@ def create_new_project(client, project_name: str, plain_code: str, user_id: Opti
         return False
 
 def verify_project_code(client, plain_code: str):
-    hashed_code = _generate_hash(plain_code) # Use the helper
-    response = client.table("projects").select("id, access_code_hash").execute()
+    hashed_input = _generate_hash(plain_code)
     
+    # Fetch data
+    response = client.table("projects").select("project_name, access_code_hash").execute()
     
-    st.write(f"DEBUG: Input: {plain_code} | Hash: {hashed_code}")
+    # Log the number of rows found
+    st.write(f"DEBUG: Found {len(response.data)} projects in database.")
     
-    
+    # Log the contents of each row
     for row in response.data:
-        if row.get('access_code_hash') == hashed_code:
+        db_hash = row.get('access_code_hash')
+        st.write(f"DEBUG: Comparing '{hashed_input[:10]}...' with '{db_hash[:10]}...'")
+        
+        if db_hash == hashed_input:
             return row['id']
+            
     return None
 
 def get_project_tasks(client, project_id):
