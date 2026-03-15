@@ -2,7 +2,28 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from db import supabase
+from supabase import create_client
 from logic import verify_project_code, create_new_project, get_project_tasks, send_nudge_email, update_task_progress , save_availability , get_team_availability, submit_pulse, get_pulse_data, get_file_hub_data, update_task_with_file
+
+
+
+def get_authenticated_client():
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    supabase = create_client(url, key)
+    
+    # This is the "Magic" part that makes RLS work
+    if "session" in st.session_state and st.session_state["session"]:
+        session = st.session_state["session"]
+        supabase.auth.set_session(session.access_token, session.refresh_token)
+    
+    return supabase
+
+
+client = get_authenticated_client()
+
+
+
 
 
 # --- PAGE CONFIG ---
@@ -248,4 +269,3 @@ elif page == "File Hub":
                         st.link_button("Open Resource", f['file_url'], use_container_width=True)
     else:
         st.info("No files have been linked to tasks yet. Update your tasks in the 'Project Status' page to see them here.")
-        
